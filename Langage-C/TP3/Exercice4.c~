@@ -1,0 +1,118 @@
+/* Menu du TP 3 - La liste de lecture */
+#include<stdio.h>
+#include<stdlib.h>
+#define M 20
+#define L 10
+#define P 1800
+	
+void init(int liste[]){
+	int i=0;
+	for(i=0;i<L;i++){
+		liste[i]=0;	
+	}
+}
+
+void afficher_duree_morceau(int duree[M]){
+	int val=0;
+	printf("Ce traitement est disponible\n");
+	do{ 
+		printf("Veuillez saisir une valeur entre 1 et %d :",M);
+		scanf("%d",&val);
+	}while((val < 1 )||(val > M));
+	printf("La durée du morceau demandé est la piste [%d] de %d seconde\n",val,duree[val-1]);
+}
+
+void afficher_liste(int liste[],int duree[M]){	
+	int i=0,m_reste=30,s_reste=0;
+	printf("Ce traitement est disponible\n");
+	for(i=0;i < L;i++){
+		printf("Le morceau numero %d a une duree de %d minute et %d seconde\n",liste[i]+1,duree[liste[i]]/60,duree[liste[i]]%60);
+		if((s_reste-(duree[liste[i]]%60)) < 0){
+			s_reste=60;
+			m_reste--;
+		}
+		s_reste-=liste[i]%60;
+		m_reste-=liste[i]/60;
+		
+		printf("Il reste %d minute %d seconde dans la liste\n",m_reste,s_reste);
+	}
+}
+
+void ajouter(int liste[],int duree[]){
+	int i,val=0;
+	printf("Ce traitement est disponible\n");
+	do{ 
+		printf("Veuillez saisir une valeur entre 1 et %d :",M);
+		scanf("%d",&val);
+	}while((val < 1 )||(val > M));
+	for(i=0;liste[i]!=0;i++);
+	
+	liste[i]=val-1;
+}
+
+void oter(int liste[],int duree[]){
+	int i,val;
+	printf("Ce traitement est disponible\n");
+	do{ 
+		printf("Veuillez saisir une valeur entre 1 et %d :",M);
+		scanf("%d",&val);
+	}while((val < 1 )||(val > M));
+	for(i=M-1;(liste[i] != duree[val]) && (i > 0);i--);
+	
+	liste[i]=0;
+	
+}
+
+void oter_doublons(){	
+	printf("Ce traitement n'est pas encore disponible\n");
+}
+
+
+/* Programme principal */
+int main(){	
+
+	/* Declaration du tableau des morceaux*/
+	int duree[M]={125,241,136,182,175,196,111,124,174,199, 200,314,80,129,213,231,285,214,152,236} ;
+	/* Declaration de la liste de lecture*/
+	int liste[L];
+	int nb_morceaux=0;
+	/* Choix de l'utilisateur */
+	int choix;	
+
+	init(liste);
+
+	do{
+		/* Affichage du menu */
+		printf("\nMenu :\n");
+		printf(" 1 - Reinitialiser la liste de lecture\n");
+		printf(" 2 - Afficher la duree d'un morceau\n");
+		printf(" 3 - Afficher la liste et la place restante \n");
+		printf(" 4 - Ajouter un morceau\n");
+		printf(" 5 - Supprimer un morceau\n");
+		printf(" 6 - Supprimer les doublons\n");
+		printf(" 7 - Quitter\n");
+		printf("Votre choix : ");
+		scanf("%i",&choix);
+
+		/* Traitement du choix de l'utilisateur */
+		switch(choix){
+			case 1 : 	init(liste); 
+					break;
+			case 2:  	afficher_duree_morceau(duree); 
+					break;
+			case 3:  	afficher_liste(liste,duree); 
+					break;
+			case 4:  	ajouter(liste,duree); 
+					break;
+			case 5:  	oter(liste,duree); 
+					break;
+			case 6:  	oter_doublons(); 
+					break;
+			case 7:  	break;
+			default: printf("Erreur: votre choix doit etre compris entre 1 et 7\n");
+		}
+	}
+	while(choix!=7);
+	printf("Au revoir !\n");
+	return EXIT_SUCCESS;
+}
